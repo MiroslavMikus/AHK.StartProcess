@@ -1,0 +1,7 @@
+Settings;notepad "{#}\data\DWC.csv";
+Run DWC in IE;iexplore.exe http://localhost:8181;false;false
+Run DWC in Chrome;chrome.exe http://localhost:8181;false;false
+Run DWC in Firefox;firefox.exe http://localhost:8181;false;false
+Run DWC in Opera;Opera.exe http://localhost:8181;false;false
+Run DWC in Safari;Safari.exe http://localhost:8181;false;false
+Run DWC in Edge,;Edge.exe http://localhost:8181;false;false

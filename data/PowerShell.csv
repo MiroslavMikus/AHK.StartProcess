@@ -1,0 +1,5 @@
+Settings;notepad "{#}\data\PowerShell.csv";
+Get DSX version to Clip;powershell -windowstyle hidden -ExecutionPolicy Bypass -File "C:\Users\MMI\Documents\PT\002 Powershell\Get_DS_Version.ps1";false;false;#v
+Install DSX;powershell -windowstyle hidden -ExecutionPolicy Bypass -File C:\Users\MMI\Documents\PT\PS1\DS_Deployment\RunInstall.ps1;false;false
+Uninstall DSX;powershell -windowstyle hidden -ExecutionPolicy Bypass -File C:\Users\MMI\Documents\PT\PS1\DS_Deployment\RunUninstall.ps1;false;false
+Just open powershell;powershell;false;false;#p

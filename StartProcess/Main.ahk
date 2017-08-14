@@ -4,17 +4,20 @@
 
 #SingleInstance force
 
-#include %A_ScriptDir%\..\SharedLib\Hotkey.ahk
+#include %A_ScriptDir%\..\SharedLibrary\Hotkey.ahk
 ;  Hotkey(hk, fun, arg*)
-#include %A_ScriptDir%\..\SharedLib\TypeOperations.ahk
+#include %A_ScriptDir%\..\SharedLibrary\TypeOperations.ahk
 ;  BoolToString(a_Bool)
 ;  StringToBool(a_string)
-#include %A_ScriptDir%\..\SharedLib\SimpleLog.ahk
+#include %A_ScriptDir%\..\SharedLibrary\SimpleLog.ahk
 ;  LogToTray(a_title, a_message, a_class, a_timeout := 5)
-;  LogToMsg(a_title, a_message, a_class, a_timeout :=0)
+;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
 ;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
 
 Global GuiTabs := Object()
+
+MsgBox , %1%
+
 Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
 if not Exist("Settings.csv"){
     LogToMsg("Exit","Settings.csv is missing. Script will be closed","info")    

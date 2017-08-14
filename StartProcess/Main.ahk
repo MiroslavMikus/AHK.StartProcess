@@ -1,7 +1,3 @@
-; Add documentation in as Readme.md
-; Settings:
-; Process to run, Run on init, Confirm, Hotkey
-
 #SingleInstance force
 
 #include %A_ScriptDir%\..\SharedLibrary\Hotkey.ahk
@@ -14,26 +10,30 @@
 ;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
 ;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
 
-Global GuiTabs := Object()
+profile = %1%
 
-MsgBox , %1%
-
-Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
-if not Exist("Settings.csv"){
-    LogToMsg("Exit","Settings.csv is missing. Script will be closed","info")    
+if not FileExist(profile){
+    LogToFile("Exit", profile . " is missing. Script will be closed", "error")
+    LogToMsg("Exit", profile . " is missing. Script will be closed", "error")    
     exitapp
 }
 
-Loop, read, Settings.csv
+Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
+
+Global GuiTabs := Object() ; Array with GuiTabs
+
+Loop, read, %profile%
 {
     if not Exist(A_LoopReadLine)
         continue
 
     MyTab := new GuiTab(A_LoopReadLine,Columns,ResolveSettings(A_LoopReadLine))
+
     GuiTabs.Insert(MyTab)
 }
 
 LogToTray("Hotkey_Process", "Settings loaded", "info")
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk

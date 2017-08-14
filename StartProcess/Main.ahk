@@ -43,11 +43,14 @@ return
 return
 
 ResolveSettings(a_row){
+    
     MyRows := Object()
+
     Loop, read, % a_row
     {
         MyRows.Insert(ResolveData(A_LoopReadLine))
     }
+
     return MyRows
 }
 
@@ -55,15 +58,19 @@ ResolveSettings(a_row){
 ResolveData(a_row){
     Args := StrSplit(a_row,";")
 
+    description := Args[1]
+    processToRun := Args[2]
+    runOnStart := StringToBool(Args[3])
     confirm := StringToBool(Args[4])
+    currentHotkey := Args[5]
 
-    if StringToBool(Args[3])
-        RunProcess(confirm , Args[2])
+    if runOnStart
+        RunProcess(confirm , processToRun)
     try{
-        Hotkey(Args[5] , "RunProcess" , confirm , Args[2])
+        Hotkey(currentHotkey , "RunProcess" , confirm , processToRun)
     }
     catch{
-        if (not Args[5] = ""){
+        if (not currentHotkey = ""){
             LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
             LogToFile("Error"," Cant create hotkey for : " . a_row, "error")
         }

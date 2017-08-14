@@ -1,4 +1,4 @@
-Settings;notepad "{#}\data\Numpad.csv";
+Settings;notepad "{#}\data\Numpad.csv";false;false;!K
 ;CMD;false;false;^Numpad1
 ;Powershell;false;false;^Numpad2
 ;services.msc;false;false;^Numpad3

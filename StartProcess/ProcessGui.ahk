@@ -23,7 +23,9 @@ Tabnumber:=1
 Gui, Add, Button, gClose x510 y360 w120 h30 , &Close Gui
 Gui, Add, Button, gCloseScript x375 y360 w120 h30 , Close Script
 Gui, Add, Button, gRestartScript x240 y360 w120 h30 , Restart Script
-Gui, Add, Link, y366 x15 , Created with <a href="www.autohotkey.com">Auto Hot Key</a>
+
+; Add Link
+Gui, Add, Link, y366 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>
 
 allTabs := ""
 Loop % MyTabs.MaxIndex(){

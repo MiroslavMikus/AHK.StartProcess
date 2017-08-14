@@ -12,9 +12,7 @@
 
 profile = %1%
 
-if not FileExist(profile){
-    LogToFile("Exit", profile . " is missing. Script will be closed", "error")
-    LogToMsg("Exit", profile . " is missing. Script will be closed", "error")    
+if not Exist(profile){ 
     exitapp
 }
 
@@ -101,7 +99,9 @@ RunProcess(a_confirm, a_path){
 Exist(a_path){
     if not FileExist(a_path)
     {
-        LogToMsg("Error", "Cannot open or access " . a_path, "error")
+        messge := "Cannot open or access " . a_path
+        LogToMsg("Error", messge, "error")
+        LogToFile("Error", messge, "error")
         return false
     }
     return true

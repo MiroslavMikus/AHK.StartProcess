@@ -56,7 +56,8 @@ CloseScript:
     exitapp
 return
 RestartScript:
-    Reload
+    ; wrappedProfile = "" . %profile% . ""
+    Run, %A_ScriptFullPath% %profile% ; todo wrap profile to ""
 return
 ;-------------------------------------------------------------------------------------
 tabchange:

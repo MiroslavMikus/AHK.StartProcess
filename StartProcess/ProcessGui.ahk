@@ -1,4 +1,4 @@
-; because i wann with double-click start selected process -> im not able to use dynamic gui from shared library... 
+; User should be aslo able to run scripts with double-click -> so in this case its not possible to use SharedLibrary\DynamicGui.ahk 
 
 global GuiTitle := ""
 global MyTabs :=""

@@ -12,7 +12,16 @@
 
 profile = %1%
 
-if not Exist(profile){ 
+if (profile = ""){
+    if Exist("Settings.csv"){
+        profile := "Settings.csv"
+    }
+    Else{
+        exitapp
+    }
+}
+else if not Exist(profile)
+{ 
     exitapp
 }
 
@@ -30,7 +39,7 @@ Loop, read, %profile%
     GuiTabs.Insert(MyTab)
 }
 
-LogToTray("Hotkey_Process", "Settings loaded", "info")
+LogToTray("AHK StartProcess", "Settings loaded", "info")
 
 return
 

@@ -28,6 +28,8 @@ Default profile is *Settings.csv*. But you can also pass your own by command par
 Main.ahk "CustomProfile.ahk"
 ```
 
+> Note: Profile name cant contain spaces like "Custom Profile.ahk"
+
 ###  Libraries
 
 Is simple CSV file with *;* separator. This file contains:

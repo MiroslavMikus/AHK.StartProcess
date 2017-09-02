@@ -33,6 +33,9 @@ ResolveProfile(profile)
 
 ResolveProfile(a_profile){
 
+    if not Exist(a_profile)
+        return
+
     Loop, read, %a_profile%
     {
         if(InStr(A_LoopReadLine, "@") = 1){ ; if first char == @
@@ -46,8 +49,6 @@ ResolveProfile(a_profile){
             if not Exist(A_LoopReadLine)
                 continue
         }
-
-        ;LogToMsg("Error", A_LoopReadLine, "error")
          
         MyTab := new GuiTab(A_LoopReadLine,Columns,ResolveSettings(A_LoopReadLine))
 

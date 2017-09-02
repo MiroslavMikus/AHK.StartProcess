@@ -20,27 +20,36 @@ Hotkey, esc, Close, on
 Tabnumber:=1
 
 ; Create Tabs
-Gui, Add, Button, gClose x510 y360 w120 h30 , &Close Gui
-Gui, Add, Button, gCloseScript x375 y360 w120 h30 , Close Script
-Gui, Add, Button, gRestartScript x240 y360 w120 h30 , Restart Script
+Gui, Add, Button, gClose x660 y460 w120 h30 , &Close Gui
+Gui, Add, Button, gCloseScript x525 y460 w120 h30 , Close Script
+Gui, Add, Button, gRestartScript x390 y460 w120 h30 , Restart Script
 
 ; Add Link
-Gui, Add, Link, y366 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>
+Gui, Add, Link, y465 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>
 
 allTabs := ""
+
 Loop % MyTabs.MaxIndex(){
+
     allTabs := allTabs . "|" . MyTabs[A_Index].TabName
 }
 StringTrimLeft, allTabs, allTabs, 1
-Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w650 h350, % allTabs
+
+Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w800 h450, % allTabs
 
 ; Fill Tabs with grid and content
 Loop % MyTabs.MaxIndex(){
+
     Header := CreateHeader(MyTabs[A_Index].Columns)
+
     Gui, Tab, % A_Index
-    ListSettings := "-Multi  x0 y20 w650 h330 gListViewEvents vProcessTab" . A_Index
+
+    ListSettings := "-Multi  x0 y20 w800 h430 gListViewEvents vProcessTab" . A_Index
+
     Gui, Add, ListView, % ListSettings, % Header
+
     AddRow(MyTabs[A_Index].Rows)
+
     LV_ModifyCol()    
 }
 gui, show, % MyPosition
@@ -78,7 +87,7 @@ RETURN
 
 
 CalculateSizePosition(){
-    Size := "w650 h400"
+    Size := "w800 h500"
     If MyPosition = ""
         MyPosition := Size
     else

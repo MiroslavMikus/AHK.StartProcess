@@ -31,6 +31,24 @@ Global GuiTabs := Object() ; Array with GuiTabs
 
 ResolveProfile(profile)
 
+LogToTray("AHK StartProcess", "Settings loaded", "info")
+
+OpenGuiHotkey = %2%
+
+if (OpenGuiHotkey = ""){
+    Hotkey("#w" , "OpenGui")
+} else {
+    Hotkey(OpenGuiHotkey , "OpenGui")    
+}
+
+return
+
+#include %A_ScriptDir%\ProcessGui.ahk
+
+OpenGui(){
+    InfoGui("Process Starter","", GuiTabs)
+}
+
 ResolveProfile(a_profile){
 
     if not Exist(a_profile)
@@ -39,9 +57,7 @@ ResolveProfile(a_profile){
     Loop, read, %a_profile%
     {
         if(InStr(A_LoopReadLine, "@") = 1){ ; if first char == @
-
              ResolveProfile(StrSplit(A_LoopReadLine, "@")[2])
-
              continue
              
         } else {
@@ -55,16 +71,6 @@ ResolveProfile(a_profile){
         GuiTabs.Insert(MyTab)
     }
 }
-
-LogToTray("AHK StartProcess", "Settings loaded", "info")
-
-return
-
-#include %A_ScriptDir%\ProcessGui.ahk
-
-#q:: ; todo change this
-    InfoGui("Process Starter","", GuiTabs)
-return
 
 ResolveSettings(a_row){
     
@@ -83,9 +89,13 @@ ResolveData(a_row){
     Args := StrSplit(a_row,";")
 
     description := Args[1]
+
     processToRun := Args[2]
+
     runOnStart := StringToBool(Args[3])
+
     confirm := StringToBool(Args[4])
+
     currentHotkey := Args[5]
 
     if runOnStart
@@ -95,7 +105,9 @@ ResolveData(a_row){
     }
     catch{
         if (not currentHotkey = ""){
+
             LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
+
             LogToFile("Error"," Cant create hotkey for : " . a_row, "error")
         }
     }
@@ -103,8 +115,11 @@ ResolveData(a_row){
 }
 
 RunProcess(a_confirm, a_path){
+
     if a_confirm {
+
         MsgBox,4, AppLuncher, % "Do you really want to run: `n" . a_path . "`n ?"
+
         IfMsgBox No 
         {
             return
@@ -113,11 +128,14 @@ RunProcess(a_confirm, a_path){
 
     try{
         StringReplace, a_process, a_path, {#}, %A_ScriptDir%
+
         run, %a_process%
+
         LogToFile("Info","Run process : " . a_process ,"Info")
     }
     catch{
         LogToMsg("Error", "AppLuncher Cant run : " . a_process, "error")
+
         LogToFile("Error","AppLuncher Cant run : " . a_process, "error")
     }
 }
@@ -126,8 +144,11 @@ Exist(a_path){
     if not FileExist(a_path)
     {
         messge := "Cannot open or access " . a_path
+
         LogToMsg("Error", messge, "error")
+
         LogToFile("Error", messge, "error")
+
         return false
     }
     return true

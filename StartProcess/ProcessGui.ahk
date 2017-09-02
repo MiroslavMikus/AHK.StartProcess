@@ -60,24 +60,25 @@ Loop % MyTabs.MaxIndex(){
 gui, show, % MyPosition
 gosub,tabchange
 RETURN
-
+;--------------------------------------- Buttons
 Close:
 GuiClose:
     Hotkey, esc, Close ,delete
     Gui, Destroy
 return
+
 CloseScript:
     exitapp
 return
+
 RestartScript:
-    ; wrappedProfile = "" . %profile% . ""
-    Run, %A_ScriptFullPath% %profile% ; todo wrap profile to ""
+    Run, %A_ScriptFullPath% %profile% %OpenGuiHotkey%
 return
-;-------------------------------------------------------------------------------------
+;---------------------------------------
 tabchange:
 GuiControlGet, Tabnumber
 Return
-;-------------------------------------------------------------------------------------
+;---------------------------------------
 
 ListViewEvents:
 if A_GuiEvent = DoubleClick

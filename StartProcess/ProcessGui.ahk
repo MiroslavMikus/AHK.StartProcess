@@ -10,7 +10,7 @@ InfoGui(a_Title, a_Position, a_GuiTabs){
     MyPosition := a_Position
     CalculateSizePosition()
     Gui, Destroy 
-    ; if is some GUI there - this will close it first (only in same thread)
+    ; if is there already gui open - this will close it first (only in same thread)
     gosub,CreateGui
 }
 
@@ -50,7 +50,12 @@ Loop % MyTabs.MaxIndex(){
 
     AddRow(MyTabs[A_Index].Rows)
 
-    LV_ModifyCol()    
+    ; Set column width based on content - for all columns
+    LV_ModifyCol() 
+    ; Set fix column width
+    LV_ModifyCol(3, 80)
+    LV_ModifyCol(4, 60)
+    LV_ModifyCol(5, 50)
 }
 gui, show, % MyPosition
 gosub,tabchange

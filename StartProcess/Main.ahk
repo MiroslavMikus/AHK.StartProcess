@@ -29,14 +29,30 @@ Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
 
-Loop, read, %profile%
-{
-    if not Exist(A_LoopReadLine)
-        continue
+ResolveProfile(profile)
 
-    MyTab := new GuiTab(A_LoopReadLine,Columns,ResolveSettings(A_LoopReadLine))
+ResolveProfile(a_profile){
 
-    GuiTabs.Insert(MyTab)
+    Loop, read, %a_profile%
+    {
+        if(InStr(A_LoopReadLine, "@") = 1){ ; if first char == @
+
+             ResolveProfile(StrSplit(A_LoopReadLine, "@")[2])
+
+             continue
+             
+        } else {
+
+            if not Exist(A_LoopReadLine)
+                continue
+        }
+
+        ;LogToMsg("Error", A_LoopReadLine, "error")
+         
+        MyTab := new GuiTab(A_LoopReadLine,Columns,ResolveSettings(A_LoopReadLine))
+
+        GuiTabs.Insert(MyTab)
+    }
 }
 
 LogToTray("AHK StartProcess", "Settings loaded", "info")
@@ -45,7 +61,7 @@ return
 
 #include %A_ScriptDir%\ProcessGui.ahk
 
-#Numpad0:: ; todo change this
+#q:: ; todo change this
     InfoGui("Process Starter","", GuiTabs)
 return
 

@@ -1,4 +1,6 @@
 @Profile\FailingRecrusiveSettings.csv
+@Profile\FailingSettings.csv
 data\PowerShell.csv
 @MissingProfile.csv
 data\Numpad.csv
+@Profile\FailingRecrusiveSettings.csv

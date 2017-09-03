@@ -35,6 +35,8 @@ profileArray.Insert(profile)
 
 ResolveProfile(profile)
 
+PrintCurrentProfilesToFile()
+
 LogToTray("AHK StartProcess", "Settings loaded", "info")
 
 OpenGuiHotkey = %2%
@@ -44,11 +46,9 @@ if (OpenGuiHotkey = "")
 
 Hotkey(OpenGuiHotkey , "OpenGui")    
 
-logStartParameters = profile : %profile% ,OpenGuiHotkey : %OpenGuiHotkey%
+logStartParameters = profile : %profile%, OpenGuiHotkey : %OpenGuiHotkey%
 
 LogToFile("StartParameters",logStartParameters , "info")
-
-profileArray:= ""
 
 return
 
@@ -106,6 +106,22 @@ CanResolverofile(a_profile){
     profileArray.Insert(a_profile)
 
     return true
+}
+
+PrintCurrentProfilesToFile(){
+
+    Profiles := ""
+    
+    for index, element in profileArray
+    {
+        Profiles = %Profiles%, %element% 
+    }
+
+    Profiles := SubStr(Profiles,3)
+
+    LogToFile("Effective Profiles",Profiles , "info")
+
+    profileArray:= "" ; Dispose profiles
 }
 
 ResolveSettings(a_row){

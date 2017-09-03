@@ -35,11 +35,14 @@ LogToTray("AHK StartProcess", "Settings loaded", "info")
 
 OpenGuiHotkey = %2%
 
-if (OpenGuiHotkey = ""){
-    Hotkey("#w" , "OpenGui")
-} else {
-    Hotkey(OpenGuiHotkey , "OpenGui")    
-}
+if (OpenGuiHotkey = "")
+    OpenGuiHotkey = "#w"
+
+Hotkey(OpenGuiHotkey , "OpenGui")    
+
+logStartParameters = profile : %profile% , OpenGuiHotkey : %OpenGuiHotkey%
+
+LogToFile("StartParameters",logStartParameters , "info")
 
 return
 

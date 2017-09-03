@@ -31,11 +31,7 @@ Global GuiTabs := Object() ; Array with GuiTabs
 
 Global profileArray := Object() ; Array contains already resolved profiles -> purpose is to prevent endless loop
 
-profileArray.Insert(profile)
-
 ResolveProfile(profile)
-
-PrintCurrentProfilesToFile()
 
 LogToTray("AHK StartProcess", "Settings loaded", "info")
 
@@ -50,6 +46,8 @@ logStartParameters = profile : %profile%, OpenGuiHotkey : %OpenGuiHotkey%
 
 LogToFile("StartParameters",logStartParameters , "info")
 
+PrintCurrentProfilesToFile()
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
@@ -60,7 +58,7 @@ OpenGui(){
 
 ResolveProfile(a_profile){
 
-    if not Exist(a_profile)
+    if not CanResolverofile(a_profile)
         return
 
     Loop, read, %a_profile%
@@ -69,9 +67,7 @@ ResolveProfile(a_profile){
 
             profilePath := StrSplit(A_LoopReadLine, "@")[2]
 
-             if CanResolverofile(profilePath){
-                ResolveProfile(profilePath)   
-             }
+                ResolveProfile(profilePath)  
 
             continue
              
@@ -88,6 +84,9 @@ ResolveProfile(a_profile){
 }
 
 CanResolverofile(a_profile){
+    
+    if not Exist(a_profile)
+        return
 
     for index, element in profileArray
     {

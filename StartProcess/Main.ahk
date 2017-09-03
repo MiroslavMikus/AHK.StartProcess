@@ -10,6 +10,8 @@
 ;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
 ;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
 
+Global profileArray := Object()
+
 profile = %1%
 
 if (profile = ""){
@@ -44,6 +46,8 @@ logStartParameters = profile : %profile% , OpenGuiHotkey : %OpenGuiHotkey%
 
 LogToFile("StartParameters",logStartParameters , "info")
 
+profileArray:= ""
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
@@ -60,8 +64,14 @@ ResolveProfile(a_profile){
     Loop, read, %a_profile%
     {
         if(InStr(A_LoopReadLine, "@") = 1){ ; if first char == @
-             ResolveProfile(StrSplit(A_LoopReadLine, "@")[2])
-             continue
+
+            profilePath := StrSplit(A_LoopReadLine, "@")[2]
+
+             if CanResolverofile(profilePath){
+                ResolveProfile(profilePath)   
+             }
+
+            continue
              
         } else {
 
@@ -73,6 +83,28 @@ ResolveProfile(a_profile){
 
         GuiTabs.Insert(MyTab)
     }
+}
+
+
+CanResolverofile(a_profile){
+
+    for index, element in profileArray
+    {
+        if (a_profile = element){
+
+            errMsg := "You are trying to resolve " . a_profile . " multiple times. This profile will be skiped."
+
+            LogToMsg("Resolving issue",errMsg ,"error")
+
+            LogToFile("Resolving issue",errMsg ,"error")
+
+            return false
+        }
+    }
+
+    profileArray.Insert(a_profile)
+
+    return true
 }
 
 ResolveSettings(a_row){

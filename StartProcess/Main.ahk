@@ -10,8 +10,6 @@
 ;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
 ;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
 
-Global profileArray := Object()
-
 profile = %1%
 
 if (profile = ""){
@@ -31,6 +29,10 @@ Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
 
+Global profileArray := Object() ; Array contains already resolved profiles -> purpose is to prevent endless loop
+
+profileArray.Insert(profile)
+
 ResolveProfile(profile)
 
 LogToTray("AHK StartProcess", "Settings loaded", "info")
@@ -38,11 +40,11 @@ LogToTray("AHK StartProcess", "Settings loaded", "info")
 OpenGuiHotkey = %2%
 
 if (OpenGuiHotkey = "")
-    OpenGuiHotkey = "#w"
+    OpenGuiHotkey := "#w"
 
 Hotkey(OpenGuiHotkey , "OpenGui")    
 
-logStartParameters = profile : %profile% , OpenGuiHotkey : %OpenGuiHotkey%
+logStartParameters = profile : %profile% ,OpenGuiHotkey : %OpenGuiHotkey%
 
 LogToFile("StartParameters",logStartParameters , "info")
 
@@ -85,7 +87,6 @@ ResolveProfile(a_profile){
     }
 }
 
-
 CanResolverofile(a_profile){
 
     for index, element in profileArray
@@ -118,7 +119,6 @@ ResolveSettings(a_row){
 
     return MyRows
 }
-
 
 ResolveData(a_row){
     Args := StrSplit(a_row,";")

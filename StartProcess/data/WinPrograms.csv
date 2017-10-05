@@ -1,5 +1,5 @@
 Open Settings;notepad {#}\data\WinPrograms.csv;false;false;
-Wmi Test;wbemtest.exe;false;false;
+Wmi Test;wbemtest.exe;false;false;!c
 Open CMD;CMD;true;true;!c
 Open PowerShell;Powershell;false;false;!p
 Open PowerShell;Powershell_ise;false;false;!i

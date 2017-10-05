@@ -9,6 +9,8 @@
 ;  LogToTray(a_title, a_message, a_class, a_timeout := 5)
 ;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
 ;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
+#include %A_ScriptDir%\..\SharedLibrary\ArrayExtensions.ahk
+; HasVal(haystack, needle)
 
 profile = %1%
 
@@ -33,6 +35,8 @@ Global GuiTabs := Object() ; Array with GuiTabs
 
 Global profileArray := Object() ; Array contains already resolved profiles -> purpose is to prevent endless loop
 
+Global CheckForHotkeys := new CheckHotkey()
+
 ResolveProfile(profile)
 
 LogToTray("AHK StartProcess", "Settings loaded", "info")
@@ -50,7 +54,8 @@ LogToFile("StartParameters",logStartParameters , "info")
 
 PrintCurrentProfilesToFile()
 
-SplitPath, profile, ProfileFileName, ProfileDirectory, ProfileExtension, ProfileNameWithoutExtension
+CheckForHotkeys.Clear()
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
@@ -154,17 +159,35 @@ ResolveData(a_row){
 
     if runOnStart
         RunProcess(confirm , processToRun, description)
-    try{
-        Hotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
-    }
-    catch{
-        if (not currentHotkey = ""){
+        
+    if (not currentHotkey ="")
+        try{
+
+            if CheckForHotkeys.CanAddHotkey(currentHotkey, processToRun){
+
+                Hotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
+            }
+            else{
+
+                firstProcess := CheckForHotkeys.ResolveHotkey(currentHotkey)
+
+                secondProcess := processToRun
+
+                message := % firstProcess . " and " . secondProcess . " wannt to register the same hotkey: " . currentHotkey . ". Hotkey for " . secondProcess . " will be disabled. Please check your libraries and fix this issue."
+                
+                LogToMsg("Hotkey registration issue", message, "error")
+
+                LogToFile("Hotkey registration issue", message, "error")
+            }
+        }
+        catch e{
+
+            MsgBox, % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
 
             LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
 
             LogToFile("Error"," Cant create hotkey for : " . a_row, "error")
         }
-    }
     return Args
 }
 
@@ -206,4 +229,42 @@ Exist(a_path){
         return false
     }
     return true
+}
+
+
+; Check and prevent multiple usages of same hotkey
+; 2 Processes cant use same hotkey !
+class CheckHotkey{
+
+    hotkeys := {}
+    processes := {}
+
+    CanAddHotkey(a_hotkey, a_process){
+
+        if (HasVal(this.hotkeys, a_hotkey) = 0){
+
+            this.hotkeys.Insert(a_hotkey)
+
+            this.processes.Insert(a_process)
+
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    ResolveHotkey(a_hotkey){
+
+        index := HasVal(this.hotkeys, a_hotkey)
+        
+        return this.processes[index]
+    }
+
+    ; Dispose Arrays
+    Clear(){
+        this.hotkeys := ""
+        this.processes := ""
+    }
 }

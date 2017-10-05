@@ -84,9 +84,14 @@ ListViewEvents:
 if A_GuiEvent = DoubleClick
 {
     gui, listview, ProcessTab%Tabnumber%
+
     LV_GetText(ProcessToRun, A_EventInfo, 2)
+
     LV_GetText(NeedConfirm, A_EventInfo, 4)
-    RunProcess(StringToBool(NeedConfirm), ProcessToRun)
+
+    LV_GetText(Description, A_EventInfo, 1)
+
+    RunProcess(StringToBool(NeedConfirm), ProcessToRun, Description)
 }
 RETURN
 

@@ -1,6 +1,6 @@
-Open Settings;notepad {#}\_data\WinPrograms.csv;false;false;
+Open Settings;notepad {#}\data\WinPrograms.csv;false;false;
 Wmi Test;wbemtest.exe;false;false;
-Open CMD;CMD;false;false;!c
+Open CMD;CMD;true;true;!c
 Open PowerShell;Powershell;false;false;!p
 Open PowerShell;Powershell_ise;false;false;!i
 Open Services;services.msc;false;false;!s

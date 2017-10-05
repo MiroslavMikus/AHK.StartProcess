@@ -153,9 +153,9 @@ ResolveData(a_row){
     currentHotkey := Args[5]
 
     if runOnStart
-        RunProcess(confirm , processToRun)
+        RunProcess(confirm , processToRun, description)
     try{
-        Hotkey(currentHotkey , "RunProcess" , confirm , processToRun)
+        Hotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
     }
     catch{
         if (not currentHotkey = ""){
@@ -168,11 +168,11 @@ ResolveData(a_row){
     return Args
 }
 
-RunProcess(a_confirm, a_path){
+RunProcess(a_confirm, a_path, a_description){
 
     if a_confirm {
 
-        MsgBox,4, AppLuncher, % "Do you really want to run: `n" . a_path . "`n ?"
+        MsgBox,4, % a_description, % "Do you really want to run: `n" . a_path . "`n ?"
 
         IfMsgBox No 
         {

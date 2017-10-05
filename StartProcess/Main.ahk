@@ -25,6 +25,8 @@ else if not Exist(profile)
     exitapp
 }
 
+SplitPath, profile, ProfileFileName, ProfileDirectory, ProfileExtension, ProfileNameWithoutExtension
+
 Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
@@ -40,7 +42,7 @@ OpenGuiHotkey = %2%
 if (OpenGuiHotkey = "")
     OpenGuiHotkey := "#w"
 
-Hotkey(OpenGuiHotkey , "OpenGui")    
+Hotkey(OpenGuiHotkey , "OpenGui", ProfileNameWithoutExtension)    
 
 logStartParameters = profile : %profile%, OpenGuiHotkey : %OpenGuiHotkey%
 
@@ -48,12 +50,14 @@ LogToFile("StartParameters",logStartParameters , "info")
 
 PrintCurrentProfilesToFile()
 
+SplitPath, profile, ProfileFileName, ProfileDirectory, ProfileExtension, ProfileNameWithoutExtension
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
 
-OpenGui(){
-    InfoGui("Process Starter","", GuiTabs)
+OpenGui(a_title){
+    GuiTitle := "Profile : " . a_title
+    InfoGui(GuiTitle,"", GuiTabs)
 }
 
 ResolveProfile(a_profile){

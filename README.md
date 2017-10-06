@@ -90,4 +90,4 @@ Open Google in IE;iexplore.exe www.google.com;false;false;^Numpad3
 Open Task Manager;taskmgr;false;false;^Numpad7
 ```
 
-> Note: that placeholder **{#}** in Process column. All Processes are defined with absolut defined path (Or Path variable in system). To make this App portable and without changing the system Path variable I created **{#}** placeholder which will be replaced with the Path where the app is runnig. You have just to place your scripts and libraries to one soubfolder of folder where is this app placed.
+> Note: that placeholder **{#}** in Process column. All Processes are defined with absolut defined path (Or Path variable in system). To make this App portable and without changing the system Path variable I created **{#}** placeholder which will be replaced with the Path where the app is runnig. You have just to place your scripts and libraries to one subfolder of folder where is this app placed.

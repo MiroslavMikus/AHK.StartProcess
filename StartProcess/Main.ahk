@@ -27,7 +27,7 @@ else if not Exist(profile)
     exitapp
 }
 
-SplitPath, profile, ProfileFileName, ProfileDirectory, ProfileExtension, ProfileNameWithoutExtension
+SplitPath, profile, , , , ProfileNameWithoutExtension
 
 Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
 
@@ -85,8 +85,10 @@ ResolveProfile(a_profile){
             if not Exist(A_LoopReadLine)
                 continue
         }
-         
-        MyTab := new GuiTab(A_LoopReadLine,Columns,ResolveSettings(A_LoopReadLine))
+        
+        SplitPath, A_LoopReadLine, , , , ProfileNameWithoutExtension
+
+        MyTab := new GuiTab(ProfileNameWithoutExtension, Columns,ResolveSettings(A_LoopReadLine))
 
         GuiTabs.Insert(MyTab)
     }
@@ -182,13 +184,30 @@ ResolveData(a_row){
         }
         catch e{
 
-            MsgBox, % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
+            msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
 
             LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
 
-            LogToFile("Error"," Cant create hotkey for : " . a_row, "error")
+            LogToFile("Error"," Cant create hotkey for : " . a_row . ". " . msg, "error")
         }
+
+    Args[5] := ReplaceHotkey(currentHotkey)
+
     return Args
+}
+
+; changes '!#t' to 'Alt + Win + t'
+ReplaceHotkey(a_hotkey){ 
+
+    StringReplace, a_hotkey, a_hotkey,^,Ctrl +%A_Space%
+
+    StringReplace, a_hotkey, a_hotkey,!,Alt +%A_Space%
+
+    StringReplace, a_hotkey, a_hotkey,+,Shift +%A_Space%
+
+    StringReplace, a_hotkey, a_hotkey,#,Win +%A_Space%
+
+    return a_hotkey
 }
 
 RunProcess(a_confirm, a_path, a_description){
@@ -210,10 +229,13 @@ RunProcess(a_confirm, a_path, a_description){
 
         LogToFile("Info","Run process : " . a_process ,"Info")
     }
-    catch{
+    catch e{
+	
+		msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
+		
         LogToMsg("Error", "AppLuncher Cant run : " . a_process, "error")
 
-        LogToFile("Error","AppLuncher Cant run : " . a_process, "error")
+        LogToFile("Error","AppLuncher Cant run : " . a_process . ". " . msg, "error")
     }
 }
 

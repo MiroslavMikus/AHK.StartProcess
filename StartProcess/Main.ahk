@@ -1,19 +1,33 @@
 #SingleInstance force
 
 #include %A_ScriptDir%\..\SharedLibrary\Hotkey.ahk
-;  Hotkey(hk, fun, arg*)
+;  Hotkey(hk, fun, arg*) : void
 #include %A_ScriptDir%\..\SharedLibrary\TypeOperations.ahk
-;  BoolToString(a_Bool)
-;  StringToBool(a_string)
+;  BoolToString(a_Bool) : string
+;  StringToBool(a_string) : bool
 #include %A_ScriptDir%\..\SharedLibrary\SimpleLog.ahk
-;  LogToTray(a_title, a_message, a_class, a_timeout := 5)
-;  LogToMsg(a_title, a_message, a_class, a_timeout := 0)
-;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt)
+;  LogToTray(a_title, a_message, a_class, a_timeout := 5) : void
+;  LogToMsg(a_title, a_message, a_class, a_timeout := 0) : void
+;  LogToFile(a_title, a_message, a_class, a_FileName := ahkLog.txt) : void
 #include %A_ScriptDir%\..\SharedLibrary\ArrayExtensions.ahk
-; HasVal(haystack, needle)
+; HasVal(haystack, needle) : int (index)
+#include CheckHotkey.ahk
+; class CheckHotkey
+#include GuiTab.ahk
+; class GuiTab
+#include GuiFunctions.ahk
+; OpenGui(a_title) : void
+; ReplaceHotkey(a_hotkey) : string
+#include ResolveProfile.ahk
+; ResolveProfile(a_profile) : Creates GuiTabs[]
+; CanResolveProfile(a_profile) : bool
+; PrintCurrentProfilesToFile() : void
+; ResolveLibrary(a_row) : string[][]
+; ResolveProcess(a_row) : string[]
 
 profile = %1%
 
+; Check if Setting are existing
 if (profile = ""){
     if Exist("Settings.csv"){
         profile := "Settings.csv"
@@ -27,8 +41,7 @@ else if not Exist(profile)
     exitapp
 }
 
-SplitPath, profile, , , , ProfileNameWithoutExtension
-
+; --------- Globals ---------
 Global Columns :=["Description","Process","OnStart","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
@@ -36,6 +49,7 @@ Global GuiTabs := Object() ; Array with GuiTabs
 Global profileArray := Object() ; Array contains already resolved profiles -> purpose is to prevent endless loop
 
 Global CheckForHotkeys := new CheckHotkey()
+; --------- Globals ---------
 
 ResolveProfile(profile)
 
@@ -46,6 +60,8 @@ OpenGuiHotkey = %2%
 if (OpenGuiHotkey = "")
     OpenGuiHotkey := "#w"
 
+SplitPath, profile, , , , ProfileNameWithoutExtension
+
 Hotkey(OpenGuiHotkey , "OpenGui", ProfileNameWithoutExtension)    
 
 logStartParameters = profile : %profile%, OpenGuiHotkey : %OpenGuiHotkey%
@@ -54,171 +70,11 @@ LogToFile("StartParameters",logStartParameters , "info")
 
 PrintCurrentProfilesToFile()
 
-CheckForHotkeys.Clear()
+CheckForHotkeys.Dispose()
 
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
-
-OpenGui(a_title){
-    GuiTitle := "Profile : " . a_title
-    InfoGui(GuiTitle,"", GuiTabs)
-}
-
-ResolveProfile(a_profile){
-
-    if not CanResolverofile(a_profile)
-        return
-
-    Loop, read, %a_profile%
-    {
-        if(InStr(A_LoopReadLine, "@") = 1){ ; if first char == @
-
-            profilePath := StrSplit(A_LoopReadLine, "@")[2]
-
-                ResolveProfile(profilePath)  
-
-            continue
-             
-        } else {
-
-            if not Exist(A_LoopReadLine)
-                continue
-        }
-        
-        SplitPath, A_LoopReadLine, , , , ProfileNameWithoutExtension
-
-        MyTab := new GuiTab(ProfileNameWithoutExtension, Columns,ResolveSettings(A_LoopReadLine))
-
-        GuiTabs.Insert(MyTab)
-    }
-}
-
-CanResolverofile(a_profile){
-    
-    if not Exist(a_profile)
-        return
-
-    for index, element in profileArray
-    {
-        if (a_profile = element){
-
-            errMsg := "You are trying to resolve " . a_profile . " multiple times. This profile will be skiped."
-
-            LogToMsg("Resolving issue",errMsg ,"error")
-
-            LogToFile("Resolving issue",errMsg ,"error")
-
-            return false
-        }
-    }
-
-    profileArray.Insert(a_profile)
-
-    return true
-}
-
-PrintCurrentProfilesToFile(){
-
-    Profiles := ""
-    
-    for index, element in profileArray
-    {
-        Profiles = %Profiles%, %element% 
-    }
-
-    Profiles := SubStr(Profiles,3)
-
-    LogToFile("Effective Profiles",Profiles , "info")
-
-    profileArray:= "" ; Dispose profiles
-}
-
-ResolveSettings(a_row){
-    
-    MyRows := Object()
-
-    Loop, read, % a_row
-    {
-        MyRows.Insert(ResolveData(A_LoopReadLine))
-    }
-
-    return MyRows
-}
-
-ResolveData(a_row){
-    Args := StrSplit(a_row,";")
-
-    description := Args[1]
-
-    processToRun := Args[2]
-
-    runOnStart := StringToBool(Args[3])
-
-    confirm := StringToBool(Args[4])
-
-    currentHotkey := Args[5]
-
-    if runOnStart
-        RunProcess(confirm , processToRun, description)
-        
-    if (not currentHotkey ="")
-        try{
-
-            if CheckForHotkeys.CanAddHotkey(currentHotkey, processToRun){
-
-                Hotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
-            }
-            else{
-
-                firstProcess := CheckForHotkeys.ResolveHotkey(currentHotkey)
-
-                secondProcess := processToRun
-
-                message := % firstProcess . " and " . secondProcess . " wannt to register the same hotkey: " . currentHotkey . ". Hotkey for " . secondProcess . " will be disabled. Please check your libraries and fix this issue."
-                
-                LogToMsg("Hotkey registration issue", message, "error")
-
-                LogToFile("Hotkey registration issue", message, "error")
-            }
-        }
-        catch e{
-
-            msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
-
-            LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
-
-            LogToFile("Error"," Cant create hotkey for : " . a_row . ". " . msg, "error")
-        }
-
-    Args[5] := ReplaceHotkey(currentHotkey)
-
-    return Args
-}
-
-; changes '!#t' to 'Alt + Win + t'
-ReplaceHotkey(a_hotkey){ 
-
-    result := ""
-
-    loop, Parse, a_hotkey
-    {
-        char = %A_LoopField%
-
-        if (char = "^")
-            result .= "Ctrl + "
-        else if (char = "!")
-            result .= "Alt + "
-        else if (char = "+")
-            result .= "Shift + "
-        else if (char = "#")
-            result .= "Win + "
-        else 
-            result .= char
-    }
-
-    return result
-}
 
 RunProcess(a_confirm, a_path, a_description){
 
@@ -261,42 +117,4 @@ Exist(a_path){
         return false
     }
     return true
-}
-
-
-; Check and prevent multiple usages of same hotkey
-; 2 Processes cant use same hotkey !
-class CheckHotkey{
-
-    hotkeys := {}
-    processes := {}
-
-    CanAddHotkey(a_hotkey, a_process){
-
-        if (HasVal(this.hotkeys, a_hotkey) = 0){
-
-            this.hotkeys.Insert(a_hotkey)
-
-            this.processes.Insert(a_process)
-
-            return true
-        }
-        else
-        {
-            return false
-        }
-    }
-
-    ResolveHotkey(a_hotkey){
-
-        index := HasVal(this.hotkeys, a_hotkey)
-        
-        return this.processes[index]
-    }
-
-    ; Dispose Arrays
-    Clear(){
-        this.hotkeys := ""
-        this.processes := ""
-    }
 }

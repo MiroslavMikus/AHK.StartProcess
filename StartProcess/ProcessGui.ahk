@@ -5,12 +5,18 @@ global MyTabs :=""
 global MyPosition :=""
     
 InfoGui(a_Title, a_Position, a_GuiTabs){
+
     GuiTitle := a_Title
+
     MyTabs := a_GuiTabs
+
     MyPosition := a_Position
+    
     CalculateSizePosition()
-    Gui, Destroy 
+
     ; if is there already gui open - this will close it first (only in same thread)
+    Gui, Destroy 
+    
     gosub,CreateGui
 }
 
@@ -130,16 +136,4 @@ AddRow(a_rows){ ; take one array [["",""],["",""]]
     else if arrayLength = 5
         Loop % a_rows.MaxIndex()
             LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4], a_rows[A_Index][5])
-}
-
-class GuiTab{
-    TabName :=""
-    Columns :=""
-    Rows :=""
-
-    __New(a_name, a_columns, a_rows){
-        this.TabName := a_name
-        this.Columns := a_columns
-        this.Rows := a_rows
-    }
 }

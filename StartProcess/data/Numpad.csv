@@ -1,9 +1,9 @@
-Settings;notepad {#}\data\Numpad.csv;false;false;!K
-;CMD;false;false;^Numpad1
-;Powershell;false;false;!c
-;services.msc;false;false;^Numpad3
-;iexplore.exe http://localhost:8181;false;false;^Numpad4
-;chrome.exe http://localhost:8181;false;false;^Numpad5
-;firefox.exe http://localhost:8181;false;false;^Numpad6
-Open Programs and features ;appwiz.cpl;false;false;^Numpad7
+Settings;notepad {#}\data\Numpad.csv;false;false;false;!K
+;CMD;false;false;false;^Numpad1
+;Powershell;false;false;false;!c
+;services.msc;false;false;false;^Numpad3
+;iexplore.exe http://localhost:8181;false;false;false;^Numpad4
+;chrome.exe http://localhost:8181;false;false;false;^Numpad5
+;firefox.exe http://localhost:8181;false;false;false;^Numpad6
+Open Programs and features ;appwiz.cpl;false;false;false;^Numpad7
 ;taskmgr;false;false;^Numpad8

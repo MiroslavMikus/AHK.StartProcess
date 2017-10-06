@@ -24,6 +24,8 @@
 ; PrintCurrentProfilesToFile() : void
 ; ResolveLibrary(a_row) : string[][]
 ; ResolveProcess(a_row) : string[]
+#include OnExit.ahk
+; class HandleExit
 
 profile = %1%
 
@@ -42,13 +44,15 @@ else if not Exist(profile)
 }
 
 ; --------- Globals ---------
-Global Columns :=["Description","Process","OnStart","Confirm","Hotkey"]
+Global Columns :=["Description","Process","OnStart","OnExit","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
 
 Global profileArray := Object() ; Array contains already resolved profiles -> purpose is to prevent endless loop
 
 Global CheckForHotkeys := new CheckHotkey()
+
+Global ExitHandler := new HandleExit() 
 ; --------- Globals ---------
 
 ResolveProfile(profile)

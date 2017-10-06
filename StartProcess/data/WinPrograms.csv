@@ -1,8 +1,8 @@
-Open Settings;notepad {#}\data\WinPrograms.csv;false;false;
-Wmi Test;wbemtest.exe;false;false;!c
-Open CMD;CMD;true;true;!c
-Open PowerShell;Powershell;false;false;!p
-Open PowerShell;Powershell_ise;false;false;!i
-Open Services;services.msc;false;false;!s
-Open Programs and features ;appwiz.cpl;false;false;!f
-Open TaskManager;taskmgr;false;false;!t
+Open Settings;notepad {#}\data\WinPrograms.csv;false;false;false;
+Wmi Test;wbemtest.exe;false;false;false;!c
+Open CMD;CMD;true;true;true;!c
+Open PowerShell;Powershell;false;false;false;!p
+Open PowerShell;Powershell_ise;false;true;false;!i
+Open Services;services.msc;false;false;false;!s
+Open Programs and features ;appwiz.cpl;false;false;false;!f
+Open TaskManager;taskmgr;false;false;false;!t

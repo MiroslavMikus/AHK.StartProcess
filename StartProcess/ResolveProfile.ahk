@@ -88,13 +88,19 @@ ResolveProcess(a_row){
 
     runOnStart := StringToBool(Args[3])
 
-    confirm := StringToBool(Args[4])
+    runOnExit := StringToBool(Args[4])
 
-    currentHotkey := Args[5]
+    confirm := StringToBool(Args[5])
+
+    currentHotkey := Args[6]
 
     if runOnStart
         RunProcess(confirm , processToRun, description)
-        
+    
+    if runOnExit{
+        ExitHandler.AddProcess(Args)
+    }
+
     if (not currentHotkey ="")
         try{
 
@@ -124,7 +130,7 @@ ResolveProcess(a_row){
             LogToFile("Error"," Cant create hotkey for : " . a_row . ". " . msg, "error")
         }
 
-    Args[5] := ReplaceHotkey(currentHotkey)
+    Args[6] := ReplaceHotkey(currentHotkey)
 
     return Args
 }

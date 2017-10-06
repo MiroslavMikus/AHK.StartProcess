@@ -73,10 +73,14 @@ GuiClose:
 return
 
 CloseScript:
+    ExitHandler.ExitingScript()
+    
     exitapp
 return
 
 RestartScript:
+    ExitHandler.ExitingScript()
+
     Run, %A_ScriptFullPath% %profile% %OpenGuiHotkey%
 return
 ;---------------------------------------
@@ -136,4 +140,7 @@ AddRow(a_rows){ ; take one array [["",""],["",""]]
     else if arrayLength = 5
         Loop % a_rows.MaxIndex()
             LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4], a_rows[A_Index][5])
+    else if arrayLength = 6
+        Loop % a_rows.MaxIndex()
+            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4], a_rows[A_Index][5], a_rows[A_Index][6])
 }

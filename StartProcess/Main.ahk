@@ -199,15 +199,25 @@ ResolveData(a_row){
 ; changes '!#t' to 'Alt + Win + t'
 ReplaceHotkey(a_hotkey){ 
 
-    StringReplace, a_hotkey, a_hotkey,^,Ctrl +%A_Space%
+    result := ""
 
-    StringReplace, a_hotkey, a_hotkey,!,Alt +%A_Space%
+    loop, Parse, a_hotkey
+    {
+        char = %A_LoopField%
 
-    StringReplace, a_hotkey, a_hotkey,+,Shift +%A_Space%
+        if (char = "^")
+            result .= "Ctrl + "
+        else if (char = "!")
+            result .= "Alt + "
+        else if (char = "+")
+            result .= "Shift + "
+        else if (char = "#")
+            result .= "Win + "
+        else 
+            result .= char
+    }
 
-    StringReplace, a_hotkey, a_hotkey,#,Win +%A_Space%
-
-    return a_hotkey
+    return result
 }
 
 RunProcess(a_confirm, a_path, a_description){

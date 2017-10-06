@@ -55,7 +55,6 @@ Loop % MyTabs.MaxIndex(){
     ; Set fix column width
     LV_ModifyCol(3, 80)
     LV_ModifyCol(4, 60)
-    LV_ModifyCol(5, 50)
 }
 gui, show, % MyPosition, % GuiTitle
 gosub,tabchange

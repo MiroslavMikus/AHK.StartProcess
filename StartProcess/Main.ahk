@@ -29,7 +29,7 @@ else if not Exist(profile)
 
 SplitPath, profile, , , , ProfileNameWithoutExtension
 
-Global Columns :=["Description","Process","Run on start","Confirm","Hotkey"]
+Global Columns :=["Description","Process","OnStart","Confirm","Hotkey"]
 
 Global GuiTabs := Object() ; Array with GuiTabs
 

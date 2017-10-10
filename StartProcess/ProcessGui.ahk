@@ -73,14 +73,10 @@ GuiClose:
 return
 
 CloseScript:
-    ExitHandler.ExitingScript()
-    
     exitapp
 return
 
 RestartScript:
-    ExitHandler.ExitingScript()
-
     Run, %A_ScriptFullPath% %profile% %OpenGuiHotkey%
 return
 ;---------------------------------------

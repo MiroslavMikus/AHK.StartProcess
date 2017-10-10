@@ -6,4 +6,4 @@ Settings;notepad {#}\data\Numpad.csv;false;false;false;!K
 ;chrome.exe http://localhost:8181;false;false;false;^Numpad5
 ;firefox.exe http://localhost:8181;false;false;false;^Numpad6
 Open Programs and features ;appwiz.cpl;false;false;false;^Numpad7
-;taskmgr;false;false;^Numpad8
+;taskmgr;false;false;false;^Numpad8

@@ -49,10 +49,12 @@ Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w1100 h450, % allTabs
 Menu, ScriptMenu, Add, &Restart, RestartScript
 Menu, ScriptMenu, Add, &Shutdown, CloseScript
 Menu, ScriptMenu, Add, &Close GUI, GuiClose
+Menu, ScriptMenu, Add
+Menu, ScriptMenu, Add, Open &Log, OpenLog
 Menu, MyMenuBar, Add, &Script, :ScriptMenu
 
 
-Menu, ProfileMenu, Add, Empty, MenuHandler
+Menu, ProfileMenu, Add, Open Profile, OpenProfile
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
 Menu, LibraryMenu, Add, Open Library, OpenLibrary
@@ -104,6 +106,22 @@ return
 
 OpenLibrary:
     MyTabs[Tabnumber].OpenLibrary()
+return
+
+OpenProfile:
+    path := "notepad " . profile 
+
+    description := "Open profile path: " . profile 
+
+    RunProcess(false, path, description)
+return
+
+OpenLog:
+    path := "notepad ahkLog.txt"
+
+    description := "Open log: ahkLog.txt"
+
+    RunProcess(false, path, description)
 return
 ;---------------------------------------
 tabchange:

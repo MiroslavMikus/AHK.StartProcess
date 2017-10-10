@@ -25,16 +25,16 @@ CreateGui:
 Hotkey, esc, Close, on
 Tabnumber:=1
 
-; Create Tabs
 Gui, Add, Button, gClose x960 y560 w120 h30 , &Close Gui
-Gui, Add, Button, gCloseScript x825 y560 w120 h30 , Close Script
-Gui, Add, Button, gRestartScript x690 y560 w120 h30 , Restart Script
+; Gui, Add, Button, gCloseScript x825 y560 w120 h30 , Close Script
+; Gui, Add, Button, gRestartScript x690 y560 w120 h30 , Restart Script
 
 ; Add Link
 Gui, Add, Link, y566 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>
 
 allTabs := ""
 
+; Create Tab names -> Tab1|Tab2...
 Loop % MyTabs.MaxIndex(){
 
     allTabs := allTabs . "|" . MyTabs[A_Index].TabName
@@ -42,7 +42,23 @@ Loop % MyTabs.MaxIndex(){
 
 StringTrimLeft, allTabs, allTabs, 1
 
-Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w800 h450, % allTabs
+; Add Tabs
+Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w1100 h450, % allTabs
+
+; Add Menu
+Menu, ScriptMenu, Add, &Restart, RestartScript
+Menu, ScriptMenu, Add, &Shutdown, CloseScript
+Menu, ScriptMenu, Add, &Close GUI, GuiClose
+Menu, MyMenuBar, Add, &Script, :ScriptMenu
+
+
+Menu, ProfileMenu, Add, Empty, MenuHandler
+Menu, MyMenuBar, Add, &Profile, :ProfileMenu
+
+Menu, LibraryMenu, Add, Empty, MenuHandler
+Menu, MyMenuBar, Add, &Library, :LibraryMenu
+
+Gui, Menu, MyMenuBar
 
 ; Fill Tabs with grid and content
 Loop % MyTabs.MaxIndex(){
@@ -60,9 +76,11 @@ Loop % MyTabs.MaxIndex(){
     ; Set column width based on content - for all columns
     LV_ModifyCol() 
     ; Set fix column width
-    LV_ModifyCol(3, 80)
+    LV_ModifyCol(3, 60)
     LV_ModifyCol(4, 60)
+    LV_ModifyCol(5, 60)
 }
+
 gui, show, % MyPosition, % GuiTitle
 gosub,tabchange
 RETURN
@@ -71,6 +89,9 @@ Close:
 GuiClose:
     Hotkey, esc, Close ,delete
     Gui, Destroy
+return
+
+MenuHandler:
 return
 
 CloseScript:
@@ -82,7 +103,7 @@ RestartScript:
 return
 ;---------------------------------------
 tabchange:
-GuiControlGet, Tabnumber
+    GuiControlGet, Tabnumber
 Return
 ;---------------------------------------
 

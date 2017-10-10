@@ -76,9 +76,16 @@ PrintCurrentProfilesToFile()
 
 CheckForHotkeys.Dispose()
 
+OnExit, ExitLabel
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
+
+ExitLabel:
+    ExitHandler.ExitingScript()
+    exitapp
+return
 
 RunProcess(a_confirm, a_path, a_description){
 

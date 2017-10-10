@@ -21,7 +21,7 @@ ResolveProfile(a_profile){
         
         SplitPath, A_LoopReadLine, , , , ProfileNameWithoutExtension
 
-        MyTab := new GuiTab(ProfileNameWithoutExtension, Columns,ResolveLibrary(A_LoopReadLine))
+        MyTab := new GuiTab(ProfileNameWithoutExtension, Columns,ResolveLibrary(A_LoopReadLine), A_LoopReadLine)
 
         GuiTabs.Insert(MyTab)
     }

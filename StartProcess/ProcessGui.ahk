@@ -55,7 +55,7 @@ Menu, MyMenuBar, Add, &Script, :ScriptMenu
 Menu, ProfileMenu, Add, Empty, MenuHandler
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
-Menu, LibraryMenu, Add, Empty, MenuHandler
+Menu, LibraryMenu, Add, Open Library, OpenLibrary
 Menu, MyMenuBar, Add, &Library, :LibraryMenu
 
 Gui, Menu, MyMenuBar
@@ -100,6 +100,10 @@ return
 
 RestartScript:
     Run, %A_ScriptFullPath% %profile% %OpenGuiHotkey%
+return
+
+OpenLibrary:
+    MyTabs[Tabnumber].OpenLibrary()
 return
 ;---------------------------------------
 tabchange:

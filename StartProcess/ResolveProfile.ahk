@@ -30,7 +30,7 @@ ResolveProfile(a_profile){
 CanResolveProfile(a_profile){
     
     if not Exist(a_profile)
-        return
+        return false
 
     for index, element in profileArray
     {

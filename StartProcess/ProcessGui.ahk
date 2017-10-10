@@ -54,10 +54,10 @@ Menu, ScriptMenu, Add, Open &Log, OpenLog
 Menu, MyMenuBar, Add, &Script, :ScriptMenu
 
 
-Menu, ProfileMenu, Add, Open Profile, OpenProfile
+Menu, ProfileMenu, Add, Open Profile in notepad, OpenProfile
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
-Menu, LibraryMenu, Add, Open Library, OpenLibrary
+Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
 Menu, MyMenuBar, Add, &Library, :LibraryMenu
 
 Gui, Menu, MyMenuBar

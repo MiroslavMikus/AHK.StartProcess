@@ -94,6 +94,8 @@ ResolveProcess(a_row){
 
     currentHotkey := Args[6]
 
+    data := new ProcessData(description,processToRun,runOnStart,runOnExit,confirm,currentHotkey)
+
     if runOnStart
         RunProcess(confirm , processToRun, description)
     
@@ -115,7 +117,7 @@ ResolveProcess(a_row){
                 secondProcess := processToRun
 
                 message := % firstProcess . " and " . secondProcess . " wannt to register the same hotkey: " . currentHotkey . ". Hotkey for " . secondProcess . " will be disabled. Please check your libraries and fix this issue."
-                
+                            
                 LogToMsg("Hotkey registration issue", message, "error")
 
                 LogToFile("Hotkey registration issue", message, "error")
@@ -123,14 +125,17 @@ ResolveProcess(a_row){
         }
         catch e{
 
-            msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
+            if A_IsCompiled{
+                msg := % "An exception was thrown! Specifically: " . e.message
+            } else {
+                msg := % "An exception was thrown!Specifically: " . e.line . " - " . e.message
+            }
+
 
             LogToMsg("Error"," Cant create hotkey for : " . a_row, "error")
 
             LogToFile("Error"," Cant create hotkey for : " . a_row . ". " . msg, "error")
         }
 
-    Args[6] := ReplaceHotkey(currentHotkey)
-
-    return Args
+    return data
 }

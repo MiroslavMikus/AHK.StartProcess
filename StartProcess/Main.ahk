@@ -26,6 +26,9 @@
 ; ResolveProcess(a_row) : string[]
 #include OnExit.ahk
 ; class HandleExit
+#include ProcessData.ahk
+; class ProcessData
+
 
 profile = %1%
 
@@ -81,6 +84,9 @@ OnExit, ExitLabel
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
+; InfoGui()
+#Include GuiEditProcess.ahk
+; EditProcess(a_processData) 
 
 ExitLabel:
     ExitHandler.ExitingScript()
@@ -108,7 +114,14 @@ RunProcess(a_confirm, a_path, a_description){
     }
     catch e{
 	
-		msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
+        if A_IsCompiled{
+
+		    msg := % "An exception was thrown!`nSpecifically: " . e.message
+
+        } else {
+
+		    msg := % "An exception was thrown!`nSpecifically: " . e.line . " - " . e.message
+        }
 		
         LogToMsg("Error", "AppLuncher Cant run : " . a_process, "error")
 

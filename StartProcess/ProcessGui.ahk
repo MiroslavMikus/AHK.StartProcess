@@ -3,6 +3,7 @@
 global GuiTitle := ""
 global MyTabs :=""
 global MyPosition :=""
+global CurrentTab :=""
     
 InfoGui(a_Title, a_Position, a_GuiTabs){
 
@@ -17,15 +18,15 @@ InfoGui(a_Title, a_Position, a_GuiTabs){
     ; if is there already gui open - this will close it first (only in same thread)
     Gui, Destroy 
     
-    gosub,CreateGui
+    gosub,CreateGui1
 }
 
 
-CreateGui:
-Hotkey, esc, Close, on
-Tabnumber:=1
+CreateGui1:
+Hotkey, esc, Close1, on
+global Tabnumber:=1
 
-Gui, Add, Button, gClose x960 y560 w120 h30 , &Close Gui
+Gui, Add, Button, gClose1 x960 y560 w120 h30 , &Close Gui
 ; Gui, Add, Button, gCloseScript x825 y560 w120 h30 , Close Script
 ; Gui, Add, Button, gRestartScript x690 y560 w120 h30 , Restart Script
 
@@ -48,13 +49,14 @@ Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w1100 h450, % allTabs
 ; Add Menu
 Menu, ScriptMenu, Add, &Restart, RestartScript
 Menu, ScriptMenu, Add, &Shutdown, CloseScript
-Menu, ScriptMenu, Add, &Close GUI, GuiClose
+Menu, ScriptMenu, Add, &Close GUI, Close1
 Menu, ScriptMenu, Add
 Menu, ScriptMenu, Add, Open &Log, OpenLog
 Menu, MyMenuBar, Add, &Script, :ScriptMenu
 
 
-Menu, ProfileMenu, Add, Open Profile in notepad, OpenProfile
+Menu, ProfileMenu, Add, Open current profile in notepad, OpenProfile
+Menu, ProfileMenu, Add, Create new profile, CreateProfile
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
 Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
@@ -85,15 +87,12 @@ Loop % MyTabs.MaxIndex(){
 
 gui, show, % MyPosition, % GuiTitle
 gosub,tabchange
+
 RETURN
 ;--------------------------------------- Buttons
-Close:
-GuiClose:
-    Hotkey, esc, Close ,delete
+Close1:
+    Hotkey, esc, Close1 ,delete
     Gui, Destroy
-return
-
-MenuHandler:
 return
 
 CloseScript:
@@ -123,6 +122,16 @@ OpenLog:
 
     RunProcess(false, path, description)
 return
+
+CreateProfile:
+    FileSelectFile, SelectedFile, S8, %A_ScriptDir%, Create new profile, Text Documents (*.txt; *.csv)
+
+    if SelectedFile =
+        MsgBox, The user didn't select anything.
+    else
+        MsgBox, The user selected the following:`n%SelectedFile%
+
+return
 ;---------------------------------------
 tabchange:
     GuiControlGet, Tabnumber
@@ -130,18 +139,35 @@ Return
 ;---------------------------------------
 
 ListViewEvents:
-if A_GuiEvent = DoubleClick
-{
-    gui, listview, ProcessTab%Tabnumber%
+    if A_GuiEvent = DoubleClick
+    {
+        gui, listview, ProcessTab%Tabnumber%
 
-    LV_GetText(ProcessToRun, A_EventInfo, 2)
+        LV_GetText(Description, A_EventInfo, 1)
 
-    LV_GetText(NeedConfirm, A_EventInfo, 4)
+        LV_GetText(ProcessToRun, A_EventInfo, 2)
 
-    LV_GetText(Description, A_EventInfo, 1)
+        LV_GetText(NeedConfirm, A_EventInfo, 4)
 
-    RunProcess(StringToBool(NeedConfirm), ProcessToRun, Description)
-}
+        RunProcess(StringToBool(NeedConfirm), ProcessToRun, Description)
+    }
+    ; double right click
+    if A_GuiEvent = R
+    {
+        gui, listview, ProcessTab%Tabnumber%       
+
+        currentTab:= MyTabs[Tabnumber].Rows
+
+        LV_GetText(Description, A_EventInfo, 1)
+
+        LV_GetText(ProcessToRun, A_EventInfo, 2)
+
+        for index, element in currentTab
+        {
+            if (element.description = Description) && (element.processPath = ProcessToRun)
+                EditProcess(element)
+        }
+    }
 RETURN
 
 
@@ -164,23 +190,6 @@ CreateHeader(a_array){
 }
 
 AddRow(a_rows){ ; take one array [["",""],["",""]]
-    arrayLength := a_rows[1].MaxIndex()        
-    if arrayLength = 1
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1])
-    else if arrayLength = 2
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2])
-    else if arrayLength = 3
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2] , a_rows[A_Index][3])
-    else if arrayLength = 4
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4])
-    else if arrayLength = 5
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4], a_rows[A_Index][5])
-    else if arrayLength = 6
-        Loop % a_rows.MaxIndex()
-            LV_Add("" , a_rows[A_Index][1] , a_rows[A_Index][2], a_rows[A_Index][3], a_rows[A_Index][4], a_rows[A_Index][5], a_rows[A_Index][6])
+    Loop % a_rows.MaxIndex()
+        LV_Add("" , a_rows[A_Index].description , a_rows[A_Index].processPath, BoolToString(a_rows[A_Index].startEvent), BoolToString(a_rows[A_Index].exitEvent), BoolToString(a_rows[A_Index].confirm), a_rows[A_Index].textHotkey)
 }

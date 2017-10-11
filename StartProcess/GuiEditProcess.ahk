@@ -1,0 +1,91 @@
+
+global CurrentProcessData
+global OldProcessData
+
+EditProcess(a_processData){
+
+    CurrentProcessData := a_processData
+    OldProcessData := a_processData
+
+    Gui, 2:Destroy 
+
+    gosub, CreateGui2
+}
+
+
+CreateGui2:
+
+
+Gui 2:Add, Text, x23 y28 w73 h24 +0x200, Description :
+Gui 2:Add, Edit, x150 y29 w512 h24 vdescription gChangeDescription, % CurrentProcessData.description
+
+Gui 2:Add, Text, x23 y71 w73 h24 +0x200, Process :
+Gui 2:Add, Edit, x150 y73 w512 h24 vprocessPath gChangeProcessPath, % CurrentProcessData.processPath
+
+Gui 2:Add, CheckBox,% "vrunonstart gChangeStartEvent x23 y120 w95 h23 " . IsChecked(CurrentProcessData.startEvent), Run on Start
+Gui 2:Add, CheckBox,% "vrunonexit gChangeEndEvent x150 y120 w95 h23 " . IsChecked(CurrentProcessData.exitEvent), Run on Exit
+Gui 2:Add, CheckBox,% "vconfirm gChangeConfirm x272 y120 w95 h23 " . IsChecked(CurrentProcessData.confirm), Confirm
+
+
+Gui 2:Add, Text, x23 y171 w73 h23 +0x200, Hotkey :
+
+if !InStr(CurrentProcessData.rawHotkey,"#")
+{
+    Gui 2:Add, Hotkey, x150 y171 w512 h21 Limit1 vrawHotkey gChangeHotkey, % CurrentProcessData.rawHotkey
+} else {
+    Gui 2:Add, Text, x150 y171 w512 h21 +0x200, Hotkeys with Windows (#) are not supported. Pleas add/update them manually.
+}
+
+Gui 2:Add, Button, x474 y222 w80 h23 gSave, &OK
+Gui 2:Add, Button, x578 y222 w80 h23 gClose2, &Close
+
+Gui 2:Show, w680 h262, Window
+Return
+
+Close2:
+    Gui, 2:Destroy
+return
+
+Save:
+    currentTab:= MyTabs[Tabnumber]
+    currentTab.SwapProcess(OldProcessData,CurrentProcessData)
+
+    Gui, 2:Destroy
+
+    OpenGui(ProfileNameWithoutExtension)
+return
+
+ChangeHotkey:
+    GuiControlGet, rawHotkey
+    CurrentProcessData.SetHotkey(rawHotkey)
+return
+
+ChangeProcessPath:
+    GuiControlGet, processPath
+    CurrentProcessData.processPath := ProcessPath
+return  
+
+ChangeStartEvent:
+    GuiControlGet, runonstart
+    CurrentProcessData.startEvent := Runonstart
+return
+
+ChangeEndEvent:
+    GuiControlGet, runonexit
+    CurrentProcessData.exitEvent := Runonexit
+return
+
+ChangeConfirm:
+    GuiControlGet, confirm
+    CurrentProcessData.confirm := Confirm
+return
+
+ChangeDescription:
+    GuiControlGet, description
+    CurrentProcessData.description := Description
+return
+
+IsChecked(a_bool){
+    if a_bool
+        return "Checked"
+}

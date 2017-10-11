@@ -19,4 +19,25 @@ class GuiTab{
 
         RunProcess(false, path, description)
     }
+
+    SwapProcess(a_oldProcess, a_newProcess){
+      
+        TempFile := % A_WorkingDir . "\temp.txt"
+
+        Loop, read, % this.LibraryPath
+        {
+            if a_oldProcess.CompareString(A_LoopReadLine){
+
+                FileAppend, % a_newProcess.ExportToString() , %TempFile%
+
+            }else{
+
+                FileAppend, % A_LoopReadLine, %TempFile%
+            }
+            Fileappend, `n, %TempFile%
+        }
+
+        FileCopy, % TempFile , % this.LibraryPath, 1
+        FileDelete, % TempFile
+    }
 }

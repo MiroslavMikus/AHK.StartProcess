@@ -56,6 +56,8 @@ Global profileArray := Object() ; Array contains already resolved profiles -> pu
 Global CheckForHotkeys := new CheckHotkey()
 
 Global ExitHandler := new HandleExit() 
+
+Global HotkeyManager := new HotkeyHandler()
 ; --------- Globals ---------
 
 ResolveProfile(profile)

@@ -1,11 +1,15 @@
 
 global CurrentProcessData
 global OldProcessData
+global RowIndex
 
-EditProcess(a_processData){
+EditProcess(a_processData, a_rowIndex){
 
     CurrentProcessData := a_processData
+
     OldProcessData := a_processData
+
+    RowIndex := a_rowIndex
 
     Gui, 2:Destroy 
 
@@ -14,7 +18,6 @@ EditProcess(a_processData){
 
 
 CreateGui2:
-
 
 Gui 2:Add, Text, x23 y28 w73 h24 +0x200, Description :
 Gui 2:Add, Edit, x150 y29 w512 h24 vdescription gChangeDescription, % CurrentProcessData.description
@@ -38,9 +41,16 @@ if !InStr(CurrentProcessData.rawHotkey,"#")
 
 Gui 2:Add, Button, x474 y222 w80 h23 gSave, &OK
 Gui 2:Add, Button, x578 y222 w80 h23 gClose2, &Close
+Gui 2:Add, Button, x578 y222 w80 h23 gDeleteProcess, &Delete
 
 Gui 2:Show, w680 h262, Window
 Return
+
+DeleteProcess:
+    currentTab:= MyTabs[Tabnumber]
+    
+    currentTab.DeleteProcess(OldProcessData)
+return
 
 Close2:
     Gui, 2:Destroy
@@ -48,11 +58,17 @@ return
 
 Save:
     currentTab:= MyTabs[Tabnumber]
+
     currentTab.SwapProcess(OldProcessData,CurrentProcessData)
 
     Gui, 2:Destroy
 
-    OpenGui(ProfileNameWithoutExtension)
+    Gui, 1:Default
+
+    gui, listview, ProcessTab%Tabnumber%
+
+    LV_Modify(RowIndex, , CurrentProcessData.description,CurrentProcessData.processPath, BoolToString(CurrentProcessData.startEvent), BoolToString(CurrentProcessData.exitEvent), BoolToString(CurrentProcessData.confirm), CurrentProcessData.textHotkey)
+    
 return
 
 ChangeHotkey:

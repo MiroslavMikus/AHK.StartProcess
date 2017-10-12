@@ -60,11 +60,13 @@ Menu, ProfileMenu, Add, Create new profile, CreateProfile
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
 Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
+Menu, ScriptMenu, Add
+Menu, LibraryMenu, Add, Add new Process, OpenLibrary
 Menu, MyMenuBar, Add, &Library, :LibraryMenu
 
 Gui, Menu, MyMenuBar
 
-; Fill Tabs with grid and content
+; Fill Tabs with list view and its content
 Loop % MyTabs.MaxIndex(){
 
     Header := CreateHeader(MyTabs[A_Index].Columns)
@@ -165,12 +167,10 @@ ListViewEvents:
         for index, element in currentTab
         {
             if (element.description = Description) && (element.processPath = ProcessToRun)
-                EditProcess(element)
+                EditProcess(element, index)
         }
     }
 RETURN
-
-
 
 CalculateSizePosition(){
     Size := "w1100 h600"
@@ -189,7 +189,7 @@ CreateHeader(a_array){
     return allTabs
 }
 
-AddRow(a_rows){ ; take one array [["",""],["",""]]
+AddRow(a_rows){
     Loop % a_rows.MaxIndex()
         LV_Add("" , a_rows[A_Index].description , a_rows[A_Index].processPath, BoolToString(a_rows[A_Index].startEvent), BoolToString(a_rows[A_Index].exitEvent), BoolToString(a_rows[A_Index].confirm), a_rows[A_Index].textHotkey)
 }

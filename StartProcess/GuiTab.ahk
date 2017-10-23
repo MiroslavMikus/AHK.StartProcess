@@ -53,9 +53,8 @@ class GuiTab{
 
             } else {
                 FileAppend, % A_LoopReadLine, %TempFile%
+                Fileappend, `n, %TempFile%
             }
-            Fileappend, `n, %TempFile%
-
         }
 
         FileCopy, % TempFile , % this.LibraryPath, 1

@@ -41,7 +41,7 @@ if !InStr(CurrentProcessData.rawHotkey,"#")
 
 Gui 2:Add, Button, x474 y222 w80 h23 gSave, &OK
 Gui 2:Add, Button, x578 y222 w80 h23 gClose2, &Close
-Gui 2:Add, Button, x578 y222 w80 h23 gDeleteProcess, &Delete
+Gui 2:Add, Button, x370 y222 w80 h23 gDeleteProcess, &Delete
 
 Gui 2:Show, w680 h262, Window
 Return
@@ -50,6 +50,8 @@ DeleteProcess:
     currentTab:= MyTabs[Tabnumber]
     
     currentTab.DeleteProcess(OldProcessData)
+
+    gosub, Close2
 return
 
 Close2:

@@ -108,7 +108,9 @@ ResolveProcess(a_row){
 
             if CheckForHotkeys.CanAddHotkey(currentHotkey, processToRun){
 
-                HotkeyManager.AddHotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
+                ; HotkeyManager.AddHotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
+                Hotkey(currentHotkey , "RunProcess" , confirm , processToRun, description)
+
             }
             else{
 

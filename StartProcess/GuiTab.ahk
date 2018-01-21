@@ -1,3 +1,4 @@
+; this class holds data which will be used in GUI
 class GuiTab{
     TabName :=""
     Columns :=""

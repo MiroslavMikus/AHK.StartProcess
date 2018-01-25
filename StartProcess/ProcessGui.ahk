@@ -50,17 +50,16 @@ Gui, Add, Tab, gtabchange vTabnumber AltSubmit x0 y0 w1100 h450, % allTabs
 Menu, ScriptMenu, Add, &Restart, RestartScript
 Menu, ScriptMenu, Add, &Shutdown, CloseScript
 Menu, ScriptMenu, Add, &Close GUI, Close1
-Menu, ScriptMenu, Add
+; Menu, ScriptMenu, Add
 Menu, ScriptMenu, Add, Open &Log, OpenLog
 Menu, MyMenuBar, Add, &Script, :ScriptMenu
-
 
 Menu, ProfileMenu, Add, Open current profile in notepad, OpenProfile
 Menu, ProfileMenu, Add, Create new profile, CreateProfile
 Menu, MyMenuBar, Add, &Profile, :ProfileMenu
 
 Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
-Menu, ScriptMenu, Add
+; Menu, LibraryMenu, Add
 Menu, LibraryMenu, Add, Add new Process, OpenLibrary
 Menu, MyMenuBar, Add, &Library, :LibraryMenu
 
@@ -153,6 +152,7 @@ ListViewEvents:
 
         RunProcess(StringToBool(NeedConfirm), ProcessToRun, Description)
     }
+
     ; double right click
     if A_GuiEvent = R
     {
@@ -166,8 +166,9 @@ ListViewEvents:
 
         for index, element in currentTab
         {
-            if (element.description = Description) && (element.processPath = ProcessToRun)
+            if (element.description = Description) && (element.processPath = ProcessToRun){
                 EditProcess(element, index)
+            }
         }
     }
 RETURN

@@ -1,3 +1,5 @@
+; TODO Disable all hotkeys while is this dialog open
+; when press ok -> check if there is the Hotkey already used
 
 global CurrentProcessData
 global OldProcessData
@@ -47,9 +49,20 @@ Gui 2:Show, w680 h262, Window
 Return
 
 DeleteProcess:
+
     currentTab:= MyTabs[Tabnumber]
+
+    MsgBox, % currentTab.Rows.MaxIndex()
     
-    currentTab.DeleteProcess(OldProcessData)
+    ; currentTab.DeleteProcess(OldProcessData)
+     
+    currentTab.RemoveProcessFromGuiTab(RowIndex)
+
+    MsgBox, % currentTab.Rows.MaxIndex()
+
+    ; gui, listview, ProcessTab%Tabnumber%
+
+    ; LV_Delete(RowIndex)
 
     gosub, Close2
 return

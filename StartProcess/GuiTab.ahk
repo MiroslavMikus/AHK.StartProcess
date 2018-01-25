@@ -2,7 +2,7 @@
 class GuiTab{
     TabName :=""
     Columns :=""
-    Rows :=""
+    Rows := new Object()
     LibraryPath := ""
 
     __New(a_name, a_columns, a_rows, a_libraryPath){
@@ -62,13 +62,21 @@ class GuiTab{
 
         FileDelete, % TempFile
 
-        loop % this.Rows.MaxIndex() {
+        ; loop % this.Rows.MaxIndex() {
 
-            if this.Rows[A_Index].Compare(a_process)
-                this.Rows.Remove(A_Index)
-        }
+        ;     if this.Rows[A_Index].Compare(a_process)
+        ;         this.Rows.Remove(A_Index)
+        ; }
+
+        ; OpenGui(ProfileNameWithoutExtension) ; should reload/redraw gui
 
         ; Remove also reference in Hotkey.ahk !
+    }
+
+    RemoveProcessFromGuiTab(a_rowNumber){
+        MsgBox, rowNumber %a_rowNumber%
+        Rows.RemoveAt(a_rowNumber)
+        Rows.Remove(a_rowNumber)
     }
 
     AddProcess(a_process){
@@ -76,6 +84,9 @@ class GuiTab{
 
         Fileappend, % "`n" . a_process.ExportToString(), % this.LibraryPath
 
+        ; add Hotkey 
         ; Hotkey(a_process.rawHotkey, "RunProcess", a_process.confirm, a_process.processPath, a_process.description)
+
+        ; refresh ui
     }
 }

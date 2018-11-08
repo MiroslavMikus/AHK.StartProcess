@@ -21,29 +21,6 @@ class GuiTab{
         RunProcess(false, path, description)
     }
 
-    SwapProcess(a_oldProcess, a_newProcess){
-      
-        TempFile := % A_WorkingDir . "\temp.txt"
-
-        Loop, read, % this.LibraryPath
-        {
-            if a_oldProcess.CompareString(A_LoopReadLine){
-
-                FileAppend, % a_newProcess.ExportToString() , %TempFile%
-
-            } else {
-                FileAppend, % A_LoopReadLine, %TempFile%
-            }
-            Fileappend, `n, %TempFile%
-        }
-
-        FileCopy, % TempFile , % this.LibraryPath, 1
-
-        FileDelete, % TempFile
-
-        ; update also reference in Hotkey.ahk !
-    }
-
     DeleteProcess(a_process){
 
         TempFile := % A_WorkingDir . "\temp.txt"
@@ -88,5 +65,19 @@ class GuiTab{
         ; Hotkey(a_process.rawHotkey, "RunProcess", a_process.confirm, a_process.processPath, a_process.description)
 
         ; refresh ui
+    }
+
+    ExportToFile(){
+
+        FileDelete, % this.LibraryPath
+
+        Loop % this.Rows.MaxIndex(){
+
+            currentRow := this.Rows[A_Index]
+
+            MsgBox, % currentRow.ExportToString()
+
+            FileAppend, % currentRow.ExportToString() . "`n", % this.LibraryPath
+        }
     }
 }

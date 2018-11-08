@@ -51,6 +51,7 @@ class ProcessData{
     }
 
     Compare(a_processData){
+        
         return (a_processData.description = this.description) && (a_processData.processPath = this processPath)
     }
 
@@ -62,5 +63,16 @@ class ProcessData{
         processToRun := Args[2]
         
         return (description = this.description) && (processToRun = this.processPath) 
+    }
+
+    Equals(a_other){
+        
+        return (this.description = a_other.description) &&
+            (this.processPath = a_other.processPath) &&
+            (this.startEvent = a_other.startEvent) &&
+            (this.exitEvent = a_other.exitEvent) &&
+            (this.startEvent = a_other.startEvent) &&
+            (this.confirm = a_other.confirm) &&
+            (this.rawHotkey = a_other.rawHotkey)
     }
 }

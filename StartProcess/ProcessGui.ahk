@@ -31,7 +31,7 @@ Gui, Add, Button, gClose1 x960 y560 w120 h30 , &Close Gui
 ; Gui, Add, Button, gRestartScript x690 y560 w120 h30 , Restart Script
 
 ; Add Link
-Gui, Add, Link, y566 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>
+Gui, Add, Link, y566 x15 , Created by <a href="www.github.com/miroslavmikus">Miroslav Mikus</a> with <a href="www.autohotkey.com">Auto Hot Key</a>. <a href="www.github.com/MiroslavMikus/AHK.StartProcess">Readme</a>.
 
 allTabs := ""
 

@@ -38,7 +38,7 @@ if !InStr(CurrentProcessData.rawHotkey,"#")
 {
     Gui 2:Add, Hotkey, x150 y171 w512 h21 Limit1 vrawHotkey gChangeHotkey, % CurrentProcessData.rawHotkey
 } else {
-    Gui 2:Add, Text, x150 y171 w512 h21 +0x200, Hotkeys with Windows (#) are not supported. Pleas add/update them manually.
+    Gui 2:Add, Text, x150 y171 w512 h21 +0x200, Hotkeys with Windows (#) are not supported. Please add/update them manually.
 }
 
 Gui 2:Add, Button, x474 y222 w80 h23 gSave, &OK

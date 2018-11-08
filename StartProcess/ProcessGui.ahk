@@ -54,14 +54,17 @@ Menu, ScriptMenu, Add, &Close GUI, Close1
 Menu, ScriptMenu, Add, Open &Log, OpenLog
 Menu, MyMenuBar, Add, &Script, :ScriptMenu
 
-Menu, ProfileMenu, Add, Open current profile in notepad, OpenProfile
-Menu, ProfileMenu, Add, Create new profile, CreateProfile
-Menu, MyMenuBar, Add, &Profile, :ProfileMenu
+Menu, SettingsMenu, Add, Open &profile in notepad, OpenProfile
+Menu, SettingsMenu, Add, Open &library in notepad, OpenLibrary
+Menu, MyMenuBar, Add, S&ettings, :SettingsMenu
 
-Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
-; Menu, LibraryMenu, Add
-Menu, LibraryMenu, Add, Add new Process, OpenLibrary
-Menu, MyMenuBar, Add, &Library, :LibraryMenu
+; Menu, ProfileMenu, Add, Open current profile in notepad, OpenProfile
+; Menu, ProfileMenu, Add, Create new profile, CreateProfile
+; Menu, MyMenuBar, Add, &Profile, :ProfileMenu
+
+; Menu, LibraryMenu, Add, Open Library in notepad, OpenLibrary
+; Menu, LibraryMenu, Add, Add new Process, OpenLibrary
+; Menu, MyMenuBar, Add, &Library, :LibraryMenu
 
 Gui, Menu, MyMenuBar
 
@@ -154,23 +157,24 @@ ListViewEvents:
     }
 
     ; double right click
-    if A_GuiEvent = R
-    {
-        gui, listview, ProcessTab%Tabnumber%       
+    ; edit gui is not working yet
+    ; if A_GuiEvent = R
+    ; {
+    ;     gui, listview, ProcessTab%Tabnumber%       
 
-        currentTab:= MyTabs[Tabnumber].Rows
+    ;     currentTab:= MyTabs[Tabnumber].Rows
 
-        LV_GetText(Description, A_EventInfo, 1)
+    ;     LV_GetText(Description, A_EventInfo, 1)
 
-        LV_GetText(ProcessToRun, A_EventInfo, 2)
+    ;     LV_GetText(ProcessToRun, A_EventInfo, 2)
 
-        for index, element in currentTab
-        {
-            if (element.description = Description) && (element.processPath = ProcessToRun){
-                EditProcess(element, index)
-            }
-        }
-    }
+    ;     for index, element in currentTab
+    ;     {
+    ;         if (element.description = Description) && (element.processPath = ProcessToRun){
+    ;             EditProcess(element, index)
+    ;         }
+    ;     }
+    ; }
 RETURN
 
 CalculateSizePosition(){

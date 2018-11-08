@@ -74,7 +74,10 @@ return
 Save:
     currentTab:= MyTabs[Tabnumber]
 
-    currentTab.SwapProcess(OldProcessData,CurrentProcessData)
+    ; todo unsubscribe old hotkey
+    
+    currentTab.ExportToFile()
+
 
     Gui, 2:Destroy
 

@@ -83,6 +83,8 @@ CheckForHotkeys.Dispose()
 
 OnExit, ExitLabel
 
+TrayTip, Ahk.StartProcess, % "Ahk start-process was started with Hotkey " . ReplaceHotkey(OpenGuiHotkey), 10, 1
+
 return
 
 #include %A_ScriptDir%\ProcessGui.ahk
@@ -143,4 +145,27 @@ Exist(a_path){
         return false
     }
     return true
+}
+
+ReplaceHotkey(a_hotkey){ 
+
+    result := ""
+
+    loop, Parse, a_hotkey
+    {
+        char = %A_LoopField%
+
+        if (char = "^")
+            result .= "Ctrl + "
+        else if (char = "!")
+            result .= "Alt + "
+        else if (char = "+")
+            result .= "Shift + "
+        else if (char = "#")
+            result .= "Win + "
+        else 
+            result .= char
+    }
+
+    return result
 }
